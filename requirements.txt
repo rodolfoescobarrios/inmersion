@@ -9,6 +9,7 @@ constantly==23.10.4
 crispy-bootstrap5==2024.10
 cryptography==43.0.3
 daphne==4.1.2
+dj-database-url==2.3.0
 Django==5.1.1
 django-crispy-forms==2.3
 gunicorn==23.0.0
@@ -23,6 +24,7 @@ pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycparser==2.22
 pyOpenSSL==24.2.1
+python-dotenv==1.0.1
 redis==5.2.0
 service-identity==24.2.0
 setuptools==75.3.0
