@@ -58,8 +58,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = Usuario
         fields = ['rut', 'first_name', 'last_name', 'email', 'rol', 'institucion', 'password1', 'password2']
 
-    def __init__(self, *args, **kwargs):
-        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+    def init(self, args, **kwargs):
+        super(CustomUserCreationForm, self).init(args, **kwargs)
         self.fields['first_name'].widget.attrs.update({'placeholder': 'Nombre'})
         self.fields['last_name'].widget.attrs.update({'placeholder': 'Apellido'})
         self.fields['email'].widget.attrs.update({'placeholder': 'Correo electrónico'})
@@ -69,7 +69,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_rut(self):
         rut = self.cleaned_data.get('rut')
-        if not validar_rut(rut):  # Suponiendo que tienes una función `validar_rut`
+        if not validar_rut(rut):  # Suponiendo que tienes una función validar_rut
             raise ValidationError("El RUT ingresado no es válido.")
         return rut
 

@@ -68,7 +68,7 @@ def products(request):
 @admin_required
 def register(request):
     data = {'form': CustomUserCreationForm()}
-    
+
     if request.method == "POST":
         user_creation_form = CustomUserCreationForm(data=request.POST)
         if user_creation_form.is_valid():
@@ -79,8 +79,9 @@ def register(request):
             )
             login(request, user)
             return redirect("home")
-    
+
     return render(request, 'registration/register.html', data)
+
 
 @login_required
 @admin_required

@@ -32,7 +32,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         (4, 'Cliente'),
     ]
 
-    # Elimina el campo `username` sobrescribiéndolo
+    # Elimina el campo username sobrescribiéndolo
     username = None
 
     # Campos personalizados
@@ -49,13 +49,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
 
-    # Definir que el login será por el campo `rut`
+    # Definir que el login será por el campo rut
     USERNAME_FIELD = 'rut'
     REQUIRED_FIELDS = ['first_name', 'rol']  # Campos adicionales requeridos
 
     objects = UsuarioManager()
 
-    def __str__(self):
+    def str(self):
         return f"{self.rut}"
 
     # Mapeo de grupos y permisos
@@ -66,7 +66,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         help_text='Grupo al que pertenece el usuario.',
         verbose_name='grupos'
     )
-    
+
     user_permissions = models.ManyToManyField(
         Permission,
         related_name='usuario_set',
@@ -74,7 +74,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         help_text='Permisos específicos del usuario.',
         verbose_name='permisos de usuario'
     )
-
+    
 class Institucion(models.Model):
     TIPO_CHOICES = [
         (1, 'Educativa'),
