@@ -1,0 +1,40 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Aplicacion</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    </head>    
+<body>
+    <ul>
+        <li><a href={% url 'home' %}>Inicio</a></li>
+
+        {% if request.user.is_authenticated %}
+        {% if request.user.is_staff %}
+        <li><a href="{% url 'register' %}" class="card-link">Registrar usuario</a></li>
+        <li><a href="{% url 'institucion' %}" class="card-link">Registrar instituciÃ³n</a></li>
+        <li><a href="{% url 'buscadorUsuario' %}" class="card-link">Buscador de usuarios</a></li>
+        {% endif %}
+        {% if request.user.rol == 4 %}  {# Cliente #}
+        <li><a href="{% url 'buscadorUsuario' %}" class="card-link">Buscador de usuarios</a></li>
+        {% endif %}
+        {% if request.user.rol == 2 %}  {# Terapeuta #}
+        <li><a href="{% url 'listarPacientes' %}" class="card-link">Listado de paciente</a></li>
+        {% endif %}
+        {% if request.user.rol == 1 %}  {# Cliente #}
+                <li><a href="{% url 'miChat' %}" class="card-link">Chat</a></li>
+        {% endif %}
+        <li><a href="{% url 'editarUsuario' request.user.pk %}">Editar mi perfil</a></li>
+        <li><a href="{% url 'exit' %}">Salir</a></li>
+        {% else %}
+        <li><a href="{% url 'login' %}">Ingresar</a></li>
+        {% endif %}
+    </ul>
+    
+    {% block content %}{% endblock %}
+</body>
+</html>

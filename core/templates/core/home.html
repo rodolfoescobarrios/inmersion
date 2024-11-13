@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h3>Inicio</h3>
+{% if request.user.is_authenticated %}
+    <hr>
+
+    <h4>{{ user.first_name | upper }}, binevenido</h4>
+        {% endif %}
+
+
+{% endblock %}

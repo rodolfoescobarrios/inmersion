@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container col-8">
+        <h2>Sala de chat: {{ room.nombre }}</h2>
+        <h4 class="text-danger">Usuario: {{ request.user }}</h4>
+        <hr>
+        
+        <!-- Contenedor de mensajes -->
+        <div id="boxMessages" style="max-height: 400px; overflow-y: auto;"></div>
+        
+        <!-- Área de envío de mensajes -->
+        <div id="chat" class="mt-3">
+            <input type="text" class="form-control" id="inputMessage" placeholder="Escribe un mensaje...">
+            <button class="btn btn-success mt-2" id="btnMessage">Enviar</button>
+            <a class="btn btn-primary mt-2 float-end" href="{% url 'home' %}">Salir</a>
+        </div>
+    </div>
+
+    <script>
+        var user = "{{ user.first_name }}";  // Asegúrate de que `user` esté correctamente definido
+        var room_id = "{{ room_id }}";  // Asegúrate de que `room_id` esté correctamente definido
+    </script>
+    
+
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}
