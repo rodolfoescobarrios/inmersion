@@ -1,1 +1,1 @@
-web gunicorn inmersion.asgi
+web gunicorn inmersion.asgi:aplication
