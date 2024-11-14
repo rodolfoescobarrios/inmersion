@@ -1,1 +1,1 @@
-web: daphne inmersion.asgi:application --host 0.0.0.0 --port 8080
+web: gunicorn inmersion.asgi:application --workers 3 --bind 0.0.0.0:8080
