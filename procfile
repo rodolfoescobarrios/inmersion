@@ -1,1 +1,1 @@
-web: gunicorn inmersion.wsgi:application --bind 0.0.0.0:$PORT
+web: gunicorn inmersion.asgi:application --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker
