@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'inmersion.wsgi.application'
+#WSGI_APPLICATION = 'inmersion.wsgi.application'
 
 ASGI_APPLICATION = 'inmersion.asgi.application'
 
