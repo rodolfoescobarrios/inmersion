@@ -101,6 +101,8 @@ ASGI_APPLICATION = 'inmersion.asgi.application'
  #   }
 #}
 
+print("DATABASE_URL:", os.getenv("DATABASE_URL"))
+
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
