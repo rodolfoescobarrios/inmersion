@@ -51,7 +51,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     # Definir que el login será por el campo rut
     USERNAME_FIELD = 'rut'
-    REQUIRED_FIELDS = ['first_name', 'rol']  # Campos adicionales requeridos
+    REQUIRED_FIELDS = ['first_name', 'rol', 'email']  # Campos adicionales requeridos
 
     objects = UsuarioManager()
 
