@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Asegúrate de que el valor del room-id esté disponible después de que el DOM esté cargado
+    // Asegúrate de que el valor del room_id esté disponible después de que el DOM esté cargado
     const roomId = document.getElementById("room_id").value;
     console.log("Room ID:", roomId);
 
@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function() {
         );
 
         socket.onopen = function(e) {
+            socket.send(JSON.stringify({
+                'message': 'Hola desde el cliente!'
+            }));
             console.log("WebSocket conectado.");
         };
 
