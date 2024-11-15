@@ -19,16 +19,76 @@
         <div>
             <button id="connect-btn">Conectar a Bluetooth</button>
             <h1><div id="status">pulso</div></h1>
-        <script src="{% static 'js/main.js' %}"></script>
         </div>
+        
+        <!-- Cargar archivos JS -->
+        <script src="{% static 'js/main.js' %}"></script>
     </div>
 
     <script>
-        var user = "{{ user.first_name }}";  // Asegúrate de que `user` esté correctamente definido
-        var room_id = "{{ room_id }}";  // Asegúrate de que `room_id` esté correctamente definido
-    </script>
-    
+        // Definir el usuario y el room_id que vienen del contexto
+        var user = "{{ request.user.username }}";  // Asegúrate de que el usuario esté bien definido
+        var room_id = "{{ room.id }}";  // Aquí usamos `room.id` en vez de `room_id`
 
+        // Generar la URL del WebSocket usando el room_id
+        const socketUrl = `wss://inmersion-production.up.railway.app/ws/room/${room_id}/`;
+
+        // Establecer la conexión WebSocket
+        const socket = new WebSocket(socketUrl);
+
+        // Evento cuando la conexión WebSocket se abre
+        socket.onopen = function (event) {
+            console.log("Conexión WebSocket establecida para la sala:", room_id);
+        };
+
+        // Evento cuando se recibe un mensaje
+        socket.onmessage = function (event) {
+            const messageData = JSON.parse(event.data);
+            console.log("Mensaje recibido:", messageData.message);
+
+            // Mostrar el mensaje en el contenedor
+            const messageContainer = document.getElementById('boxMessages');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = messageData.message;
+            messageContainer.appendChild(messageElement);
+
+            // Scroll hacia el último mensaje
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        };
+
+        // Evento cuando se cierra la conexión
+        socket.onclose = function (event) {
+            console.log("Conexión WebSocket cerrada:", event);
+        };
+
+        // Evento para manejar errores de la conexión
+        socket.onerror = function (error) {
+            console.error("Error en WebSocket:", error);
+        };
+
+        // Enviar el mensaje cuando se hace clic en el botón "Enviar"
+        document.getElementById('btnMessage').addEventListener('click', function() {
+            const messageInput = document.getElementById('inputMessage');
+            const message = messageInput.value.trim();
+
+            if (message) {
+                socket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInput.value = ''; // Limpiar el campo de entrada
+            }
+        });
+
+        // Opcional: Enviar mensaje también al presionar Enter
+        document.getElementById('inputMessage').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evitar el envío del formulario
+                document.getElementById('btnMessage').click();  // Llamar a la función de enviar
+            }
+        });
+    </script>
+
+    <!-- Cargar otros archivos JS necesarios -->
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
