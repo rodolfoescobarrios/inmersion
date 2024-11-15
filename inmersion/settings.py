@@ -93,7 +93,12 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [os.getenv("REDIS_URL")],  # La URL de Redis configurada en Railway
+            "hosts": [
+                {
+                    "host": os.getenv("REDISHOST", "redis.railway.internal"),
+                    "port": int(os.getenv("REDISPORT", 6379)),
+                },
+            ],
         },
     },
 }
