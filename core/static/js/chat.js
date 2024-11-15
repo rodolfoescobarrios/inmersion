@@ -1,97 +1,56 @@
-$(function(){
-    // Verifica si room_id está definido
-    if (typeof room_id === 'undefined') {
-        console.error('room_id no está definido');
-        return;  // Detén la ejecución si room_id no está disponible
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    // Definir URL del WebSocket
+    const socketUrl = `wss://inmersion-production.up.railway.app/ws/room/${room_id}/`;
 
-    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; // Usa 'wss:' para HTTPS y 'ws:' para HTTP
-    var url = protocol + '//' + window.location.host + '/ws/room/' + room_id + '/';
-    console.log(url);
+    // Establecer la conexión WebSocket
+    const socket = new WebSocket(socketUrl);
 
-    var chatSocket = new WebSocket(url); // Aquí ya se usa la URL correct
+    // Conexión abierta
+    socket.onopen = function () {
+        console.log("Conexión WebSocket establecida para la sala:", room_id);
+    };
 
-    console.log(user, room_id)
+    // Recibir mensajes
+    socket.onmessage = function (event) {
+        const messageData = JSON.parse(event.data);
+        console.log("Mensaje recibido:", messageData.message);
 
-// Cambia de ws:// a wss://
-    const socket = new WebSocket('wss://inmersion-production.up.railway.app/ws/room/1/');
-    console.log(url)
+        // Mostrar el mensaje en el contenedor
+        const messageContainer = document.getElementById('boxMessages');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = messageData.message;
+        messageContainer.appendChild(messageElement);
 
-    var chatSocket = new WebSocket(url)
-    // Definimos un tiempo de desconexión de 5 minutos (en milisegundos)
-    console.log(chatSocket)
+        // Scroll hacia el último mensaje
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    };
 
-    chatSocket.onopen = function(e){
-        console.log('WEBSOCKET ABIERTO')
-    }
+    // Conexión cerrada
+    socket.onclose = function (event) {
+        console.log("Conexión WebSocket cerrada:", event);
+    };
 
-    chatSocket.onclose = function(e){
-        console.log('WEBSOCKET CERRADO')
-    }
+    // Manejar errores
+    socket.onerror = function (error) {
+        console.error("Error en WebSocket:", error);
+    };
 
-    chatSocket.onmessage = function(data) {
-        const datamsj = JSON.parse(data.data)
-        var msj = datamsj.message
-        var username = datamsj.username
-        var datetime = datamsj.datetime
+    // Enviar mensaje al hacer clic en "Enviar"
+    document.getElementById('btnMessage').addEventListener('click', () => {
+        const messageInput = document.getElementById('inputMessage');
+        const message = messageInput.value.trim();
 
-        
-    }
-
-    document.querySelector('#btnMessage').addEventListener('click', sendMessage)
-    document.querySelector('#inputMessage').addEventListener('keypress', function(e){
-        if(e.keyCode == 13){
-            sendMessage()
+        if (message) {
+            socket.send(JSON.stringify({ 'message': message }));
+            messageInput.value = ''; // Limpiar el campo
         }
-    })
+    });
 
-    function sendMessage(){
-        var message = document.querySelector('#inputMessage')
-
-        if(message.value.trim() !== ''){
-            loadMessageHTML(message.value.trim())
-            chatSocket.send(JSON.stringify({
-                message: message.value.trim(),
-            }))
-
-            console.log(message.value.trim())
-
-            message.value = ''
-        } else {
-            console.log('Envió un mensaje vacío')
+    // Enviar mensaje al presionar "Enter"
+    document.getElementById('inputMessage').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Evitar envío de formulario
+            document.getElementById('btnMessage').click(); // Simular clic
         }
-    }
-
-    function loadMessageHTML(m){
-        var currentDatetime = new Date();
-        var dateObject = new Date(currentDatetime)
-
-        var year = dateObject.getFullYear();
-        var month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
-        var day = ('0' + dateObject.getDate()).slice(-2);
-        var hours = ('0' + dateObject.getHours()).slice(-2);
-        var minutes = ('0' + dateObject.getMinutes()).slice(-2);
-        var seconds = ('0' + dateObject.getSeconds()).slice(-2);
-
-        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-
-        document.querySelector('#boxMessages').innerHTML +=
-        `
-        <div class="alert alert-primary" role="alert">
-            ${m}
-            <div>
-                <small class="fst-italic fw-bold">${user}</small>
-                <small class="float-end">${formattedDate}</small>
-            </div>
-        </div>
-        `
-    }
-
-})
-
-
-
-
-
-
-
+    });
+});
