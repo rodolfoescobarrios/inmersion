@@ -1,6 +1,6 @@
-from django.urls import path
+from django.urls import re_path
 from .consumers import chatConsumers
 
 websoket_urlpatterns = [
-    path('ws/room/<room_id>/', chatConsumers.as_asgi()),
+    re_path(r'ws/room/(?P<room_id>\d+)/$', chatConsumers.ChatConsumer.as_asgi()),
 ]
