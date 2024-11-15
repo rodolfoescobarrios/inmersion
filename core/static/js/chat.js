@@ -2,7 +2,8 @@ $(function(){
 
     console.log(user, room_id)
 
-    var url = 'ws://' + window.location.host + '/ws/room/' + room_id + '/'
+// Cambia de ws:// a wss://
+    const socket = new WebSocket('wss://inmersion-production.up.railway.app/ws/room/1/');
     console.log(url)
 
     var chatSocket = new WebSocket(url)
