@@ -1,56 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Definir URL del WebSocket
-    const socketUrl = `wss://inmersion-production.up.railway.app/ws/room/${room_id}/`;
+document.addEventListener("DOMContentLoaded", function() {
+    // Asegúrate de que el valor del room-id esté disponible después de que el DOM esté cargado
+    const roomId = document.getElementById("room_id").value;
 
-    // Establecer la conexión WebSocket
-    const socket = new WebSocket(socketUrl);
+    // Verifica si el roomId existe antes de intentar crear la conexión
+    if (roomId) {
+        const socket = new WebSocket(
+            `wss://${window.location.host}/ws/room/${roomId}/`
+        );
 
-    // Conexión abierta
-    socket.onopen = function () {
-        console.log("Conexión WebSocket establecida para la sala:", room_id);
-    };
+        socket.onopen = function(e) {
+            console.log("WebSocket conectado.");
+        };
 
-    // Recibir mensajes
-    socket.onmessage = function (event) {
-        const messageData = JSON.parse(event.data);
-        console.log("Mensaje recibido:", messageData.message);
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log("Mensaje recibido:", data.message);
+        };
 
-        // Mostrar el mensaje en el contenedor
-        const messageContainer = document.getElementById('boxMessages');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = messageData.message;
-        messageContainer.appendChild(messageElement);
+        socket.onclose = function(e) {
+            console.error("WebSocket cerrado:", e);
+        };
 
-        // Scroll hacia el último mensaje
-        messageContainer.scrollTop = messageContainer.scrollHeight;
-    };
-
-    // Conexión cerrada
-    socket.onclose = function (event) {
-        console.log("Conexión WebSocket cerrada:", event);
-    };
-
-    // Manejar errores
-    socket.onerror = function (error) {
-        console.error("Error en WebSocket:", error);
-    };
-
-    // Enviar mensaje al hacer clic en "Enviar"
-    document.getElementById('btnMessage').addEventListener('click', () => {
-        const messageInput = document.getElementById('inputMessage');
-        const message = messageInput.value.trim();
-
-        if (message) {
-            socket.send(JSON.stringify({ 'message': message }));
-            messageInput.value = ''; // Limpiar el campo
-        }
-    });
-
-    // Enviar mensaje al presionar "Enter"
-    document.getElementById('inputMessage').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Evitar envío de formulario
-            document.getElementById('btnMessage').click(); // Simular clic
-        }
-    });
+        socket.onerror = function(e) {
+            console.error("Error en WebSocket:", e);
+        };
+    } else {
+        console.error("No se pudo obtener el roomId.");
+    }
 });
