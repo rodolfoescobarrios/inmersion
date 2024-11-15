@@ -87,6 +87,10 @@
             }
         });
     </script>
+    <script>
+        var room_id = "{{ room_id }}";  // room_id debería ser un valor numérico
+        console.log("Room ID:", room_id);  // Verifica si se imprime correctamente
+    </script>
 
     <!-- Cargar otros archivos JS necesarios -->
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
