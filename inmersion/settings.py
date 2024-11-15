@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure--o%d-5g$i*uruzs2q^)!32)gudg4puyn2rve4#d7ke32fc1^!q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +38,7 @@ CSRF_TRUSTED_ORIGINS = ['https://inmersion-production.up.railway.app']
 
 INSTALLED_APPS = [
     'daphne',
+    'channels',
     'crispy_forms',
     'crispy_bootstrap5',
     'django.contrib.admin',
@@ -86,6 +86,15 @@ TEMPLATES = [
 #WSGI_APPLICATION = 'inmersion.wsgi.application'
 
 ASGI_APPLICATION = 'inmersion.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.getenv("REDIS_URL")],  # La URL de Redis configurada en Railway
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
