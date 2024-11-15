@@ -26,6 +26,7 @@
 <script>
     const user = "{{ request.user.username }}";  // Usuario actual
     const room_id = "{{ room.id }}";  // ID de la sala de chat
+    console.log("Room ID:", room_id); // Este log debe mostrar la ID de la sala
 </script>
 <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
