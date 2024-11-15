@@ -1,4 +1,15 @@
 $(function(){
+    // Verifica si room_id está definido
+    if (typeof room_id === 'undefined') {
+        console.error('room_id no está definido');
+        return;  // Detén la ejecución si room_id no está disponible
+    }
+
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; // Usa 'wss:' para HTTPS y 'ws:' para HTTP
+    var url = protocol + '//' + window.location.host + '/ws/room/' + room_id + '/';
+    console.log(url);
+
+    var chatSocket = new WebSocket(url); // Aquí ya se usa la URL correct
 
     console.log(user, room_id)
 
