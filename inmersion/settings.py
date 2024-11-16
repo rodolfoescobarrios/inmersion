@@ -97,6 +97,7 @@ CHANNEL_LAYERS = {
                 {
                     "host": os.getenv("REDISHOST", "redis.railway.internal"),
                     "port": int(os.getenv("REDISPORT", 6379)),
+                    "password": os.getenv("REDISPASSWORD", None), 
                 },
             ],
         },
